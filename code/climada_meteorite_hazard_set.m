@@ -45,7 +45,7 @@ function hazard=climada_meteorite_hazard_set
 %       arr(event_i,centroid_i),sparse: the hazard intensity of event_i at
 %           centroid_i
 %       frequency(event_i): the frequency of each event
-%       matrix_density: the density of the sparse array hazard.arr
+%       matrix_density: the density of the sparse array hazard.intensity
 %       filename: the filename of the hazard event set (if passed as a
 %           struct, this is often useful)
 % MODIFICATION HISTORY: 
@@ -65,14 +65,14 @@ if ~climada_init_vars(1),return;end % init/import global variables
 hazard.peril_ID='ME'; % ME for MEteorite
 hazard_set_file=[climada_global.data_dir filesep 'hazards' filesep 'ME_hazard.mat'];
 centroids_file='Meteorite_centroids_small.xls'; % next line only to add path
-centroids_file=[climada_global.additional_dir filesep 'meteorite' filesep 'data' filesep 'system' filesep centroids_file]; % add path
+centroids_file=[climada_global.modules_dir filesep 'meteorite' filesep 'data' filesep 'system' filesep centroids_file]; % add path
 %
 % whether we show the check plots (default=1)
 % if =1, only key plots, if =2 all plots, if=0 no plots
 % no plots, if more than 100000 events
 show_check_plots=2; % default=1
 %
-matrix_density=0.0001; % decimal, hence 0.01 means 1% density of hazard.arr
+matrix_density=0.0001; % decimal, hence 0.01 means 1% density of hazard.intensity
 %
 % some hazard parameters
 hazard.event_count=100000; % default 1000000
@@ -187,7 +187,7 @@ if exist(centroids_file,'file')
     % next line is a bit redundant (a target for memory optimization if needed)
     hazard.meteor_impact=meteor_impact; % original data for storage (as long as space allows)
     n_centroids=length(hazard.centroid_ID);
-    hazard.arr=spalloc(hazard.event_count,n_centroids,fix(n_centroids*hazard.event_count*matrix_density));
+    hazard.intensity=spalloc(hazard.event_count,n_centroids,fix(n_centroids*hazard.event_count*matrix_density));
 
     % interpolate hazard to CalculationUnit
     msgstr=sprintf('Interpolation to %i centroids...',n_centroids);
@@ -212,7 +212,7 @@ if exist(centroids_file,'file')
         dist_km=climada_distance_km(hazard.lon(cent_i),hazard.lat(cent_i),meteor_impact.lon,meteor_impact.lat);
         pos=find((dist_km-meteor_impact.diam_km)<0); % CU within impact distance
         if length(pos)>0
-            hazard.arr(pos,cent_i)=dist_km(pos);
+            hazard.intensity(pos,cent_i)=dist_km(pos);
             cent_hit=cent_hit+1;
             cent_hit_abs=cent_hit_abs+length(pos);
             cent_hit_pos(cent_i)=1;
@@ -230,12 +230,12 @@ if exist(centroids_file,'file')
         plot(hazard.lon(cent_hit_pos),hazard.lat(cent_hit_pos),'xg','MarkerSize',3);
     end % show_check_plots
 
-    hazard.matrix_density=nnz(hazard.arr)/numel(hazard.arr);
+    hazard.matrix_density=nnz(hazard.intensity)/numel(hazard.intensity);
     fprintf('matrix density %2.4f%%\n',hazard.matrix_density*100);
 
     if show_check_plots>0
         figure('Name','Meteorite hazard array','Color',[1 1 1])
-        spy(hazard.arr); hold on
+        spy(hazard.intensity); hold on
         title('Meteorite hazard array');
         xlabel('events');ylabel('centroids');
     end % show_check_plots
