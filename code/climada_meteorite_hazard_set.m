@@ -62,10 +62,12 @@ if ~climada_init_vars(1),return;end % init/import global variables
 
 % PARAMETERS
 %
+module_data_dir=[fileparts(fileparts(mfilename('fullpath'))) filesep 'data'];
+%
 hazard.peril_ID='ME'; % ME for MEteorite
 hazard_set_file=[climada_global.data_dir filesep 'hazards' filesep 'ME_hazard.mat'];
 centroids_file='Meteorite_centroids_small.xls'; % next line only to add path
-centroids_file=[climada_global.modules_dir filesep 'meteorite' filesep 'data' filesep 'system' filesep centroids_file]; % add path
+centroids_file=[module_data_dir filesep 'system' filesep centroids_file]; % add path
 %
 % whether we show the check plots (default=1)
 % if =1, only key plots, if =2 all plots, if=0 no plots
