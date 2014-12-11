@@ -193,22 +193,19 @@ if exist(centroids_file,'file')
 
     % interpolate hazard to CalculationUnit
     msgstr=sprintf('Interpolation to %i centroids...',n_centroids);
-    h = waitbar(0,msgstr);
+    if climada_global.waitbar,h = waitbar(0,msgstr);end
     fprintf('%s\n',msgstr);
     cent_hit=0;cent_hit_abs=0;
     cent_hit_pos=zeros(1,n_centroids);
     t0 = clock;
     for cent_i=1:n_centroids
-        waitbar(cent_i/n_centroids,h);
+        if climada_global.waitbar,waitbar(cent_i/n_centroids,h);end
         
-        if mod(cent_i,1000)==0 % show time est. every 1000th CU
+        if mod(cent_i,1000)==0 && climada_global.waitbar % show time est. every 1000th CU
             est_time_rem_min=(n_centroids-cent_i)*etime(clock,t0)/cent_i/60;
             fprintf('estimated time remaining %3.2f min\n',est_time_rem_min)
             msgstr=sprintf('time remaining %3.2f min',est_time_rem_min);
             waitbar(cent_i/n_centroids,h,msgstr);
-
-        else
-            waitbar(cent_i/n_centroids,h);
         end
                        
         dist_km=climada_distance_km(hazard.lon(cent_i),hazard.lat(cent_i),meteor_impact.lon,meteor_impact.lat);
@@ -222,7 +219,7 @@ if exist(centroids_file,'file')
         end
     end % cent_i
     fprintf('centroids interpolation took %f sec\n',etime(clock,t0))
-    close(h)
+    if climada_global.waitbar,close(h);end
     hazard.comment2=sprintf('%i (%2.2f%%) centroids hit (by %i events)',cent_hit,cent_hit/n_centroids*100,cent_hit_abs);
     fprintf('%s\n',hazard.comment2);
 
