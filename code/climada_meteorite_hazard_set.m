@@ -178,13 +178,13 @@ if exist(centroids_file,'file')
     %     if show_check_plots>0
     %         % add centroids
     %         hold on
-    %         plot(centroids.Longitude,centroids.Latitude,'.g','MarkerSize',1);
+    %         plot(centroids.lon,centroids.lat,'.g','MarkerSize',1);
     %     end % show_check_plots
 
     hazard.centroid_ID=centroids.centroid_ID';
     hazard.centroids_file=centroids_file;
-    hazard.lat=centroids.Latitude';
-    hazard.lon=centroids.Longitude';
+    hazard.lat=centroids.lat';
+    hazard.lon=centroids.lon';
     hazard.severity=meteor_impact.diam_km'; % the original diameter
     % next line is a bit redundant (a target for memory optimization if needed)
     hazard.meteor_impact=meteor_impact; % original data for storage (as long as space allows)
