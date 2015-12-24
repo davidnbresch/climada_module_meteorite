@@ -1,7 +1,8 @@
-climada_module_meteorites
-=========================
+climada_module_meteorite
+========================
+(renamed to climada_module_meteorite from climada_module_meteorites, 20151224)
 
-climada module meteorites - a global meteorite hazard event set for climada
+implements a global meteorite hazard event set for climada
 
 this repository contains an additional climada module, please install climada (the core module) first 
 (see repository named simply climada)
