@@ -50,12 +50,13 @@ function hazard=climada_meteorite_hazard_set
 %           struct, this is often useful)
 % MODIFICATION HISTORY: 
 % David N. Bresch, david.bresch@gmail.com, 20130317, based on work back in 20080801
+% David N. Bresch, david.bresch@gmail.com, 20170524, climada_init_vars without reset
 %-
 
 hazard=[]; % init output
 
 global climada_global
-if ~climada_init_vars(1),return;end % init/import global variables
+if ~climada_init_vars,return;end % init/import global variables
 
 % poor man's version to check arguments
 %%if ~exist('param1','var'),param1=[];end
